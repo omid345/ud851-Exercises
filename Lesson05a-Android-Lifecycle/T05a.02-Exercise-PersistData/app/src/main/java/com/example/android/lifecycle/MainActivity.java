@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     // TODO (1) Create a key String called LIFECYCLE_CALLBACKS_TEXT_KEY
+    private static final String LIFECYCLE_CALLBACKS_TEXT_KEY = "callbacks";
 
     /* Constant values for the names of each respective lifecycle callback */
     private static final String ON_CREATE = "onCreate";
@@ -50,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
         mLifecycleDisplay = (TextView) findViewById(R.id.tv_lifecycle_events_display);
 
         // TODO (6) If savedInstanceState is not null and contains LIFECYCLE_CALLBACKS_TEXT_KEY, set that text on our TextView
-
+        if (savedInstanceState != null ){
+            String allPreviousLifecycleCallbacks = savedInstanceState
+                    .getString(LIFECYCLE_CALLBACKS_TEXT_KEY);
+        }
         logAndAppend(ON_CREATE);
     }
 
@@ -62,79 +66,79 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     protected void onStart() {
-        super.onStart();
+        supuper.onDestroy();
 
-        logAndAppend(ON_START);
-    }
+        logAndApper.onStart();
 
-    /**
-     * Called when the activity will start interacting with the user. At this point your activity
-     * is at the top of the activity stack, with user input going to it.
-     *
-     * Always followed by onPause().
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
+            logAndAppend(ON_START);
+        }
 
-        logAndAppend(ON_RESUME);
-    }
+        /**
+         * Called when the activity will start interacting with the user. At this point your activity
+         * is at the top of the activity stack, with user input going to it.
+         *
+         * Always followed by onPause().
+         */
+        @Override
+        protected void onResume() {
+            super.onResume();
 
-    /**
-     * Called when the system is about to start resuming a previous activity. This is typically
-     * used to commit unsaved changes to persistent data, stop animations and other things that may
-     * be consuming CPU, etc. Implementations of this method must be very quick because the next
-     * activity will not be resumed until this method returns.
-     *
-     * Followed by either onResume() if the activity returns back to the front, or onStop() if it
-     * becomes invisible to the user.
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
+            logAndAppend(ON_RESUME);
+        }
 
-        logAndAppend(ON_PAUSE);
-    }
+        /**
+         * Called when the system is about to start resuming a previous activity. This is typically
+         * used to commit unsaved changes to persistent data, stop animations and other things that may
+         * be consuming CPU, etc. Implementations of this method must be very quick because the next
+         * activity will not be resumed until this method returns.
+         *
+         * Followed by either onResume() if the activity returns back to the front, or onStop() if it
+         * becomes invisible to the user.
+         */
+        @Override
+        protected void onPause() {
+            super.onPause();
 
-    /**
-     * Called when the activity is no longer visible to the user, because another activity has been
-     * resumed and is covering this one. This may happen either because a new activity is being
-     * started, an existing one is being brought in front of this one, or this one is being
-     * destroyed.
-     *
-     * Followed by either onRestart() if this activity is coming back to interact with the user, or
-     * onDestroy() if this activity is going away.
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
+            logAndAppend(ON_PAUSE);
+        }
 
-        logAndAppend(ON_STOP);
-    }
+        /**
+         * Called when the activity is no longer visible to the user, because another activity has been
+         * resumed and is covering this one. This may happen either because a new activity is being
+         * started, an existing one is being brought in front of this one, or this one is being
+         * destroyed.
+         *
+         * Followed by either onRestart() if this activity is coming back to interact with the user, or
+         * onDestroy() if this activity is going away.
+         */
+        @Override
+        protected void onStop() {
+            super.onStop();
 
-    /**
-     * Called after your activity has been stopped, prior to it being started again.
-     *
-     * Always followed by onStart()
-     */
-    @Override
-    protected void onRestart() {
-        super.onRestart();
+            logAndAppend(ON_STOP);
+        }
 
-        logAndAppend(ON_RESTART);
-    }
-    
-    /**
-     * The final call you receive before your activity is destroyed. This can happen either because
-     * the activity is finishing (someone called finish() on it, or because the system is
-     * temporarily destroying this instance of the activity to save space. You can distinguish
-     * between these two scenarios with the isFinishing() method.
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        /**
+         * Called after your activity has been stopped, prior to it being started again.
+         *
+         * Always followed by onStart()
+         */
+        @Override
+        protected void onRestart() {
+            super.onRestart();
 
-        logAndAppend(ON_DESTROY);
+            logAndAppend(ON_RESTART);
+        }
+
+        /**
+         * The final call you receive before your activity is destroyed. This can happen either because
+         * the activity is finishing (someone called finish() on it, or because the system is
+         * temporarily destroying this instance of the activity to save space. You can distinguish
+         * between these two scenarios with the isFinishing() method.
+         */
+        @Override
+        protected void onDestroy() {
+            send(ON_DESTROY);
     }
 
     // TODO (2) Override onSaveInstanceState
@@ -142,6 +146,15 @@ public class MainActivity extends AppCompatActivity {
     // TODO (3) Call super.onSaveInstanceState
     // TODO (4) Call logAndAppend with the ON_SAVE_INSTANCE_STATE String
     // TODO (5) Put the text from the TextView in the outState bundle
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        logAndAppend(ON_SAVE_INSTANCE_STATE);
+        String lifecycleDisplayTextViewContents = mLifecycleDisplay.getText().toString();
+        outState.putString(LIFECYCLE_CALLBACKS_TEXT_KEY, lifecycleDisplayTextViewContents);
+
+    }
 
     /**
      * Logs to the console and appends the lifecycle method name to the TextView so that you can
