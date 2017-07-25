@@ -12,6 +12,7 @@
         MainActivity using a notification, it will take you back to the already opened activity, not
         generate a new one -->
         <activity
+            android:launchMode="singleTop"
             android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
